@@ -1,0 +1,3 @@
+# Ottawa-transportation-collision
+
+Roadway traffic accidents are a major concern for the government and citizens. Mortality road due to road accidents is spreading day by day. To make driving safe, analysis of transportation collision data is very important. In this project, we used RapidMiner tool to apply data mining techniques on the collision dataset of the city of Ottawa to analyze this problem. We tried to find out the effect of weather, road surface, traffic, lighting on the severity of accidents. We also wanted to see if people drive more cautiously at the location of the red-light camera or not. The results can be used to take some accidental prevention measures in the city of Ottawa.
