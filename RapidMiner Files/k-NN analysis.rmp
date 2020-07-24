@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?><process version="9.2.000">
+  <context>
+    <input/>
+    <output/>
+    <macros/>
+  </context>
+  <operator activated="true" class="process" compatibility="9.2.000" expanded="true" name="Process">
+    <parameter key="logverbosity" value="init"/>
+    <parameter key="random_seed" value="2001"/>
+    <parameter key="send_mail" value="never"/>
+    <parameter key="notification_email" value=""/>
+    <parameter key="process_duration_for_mail" value="30"/>
+    <parameter key="encoding" value="SYSTEM"/>
+    <process expanded="true">
+      <operator activated="true" class="retrieve" compatibility="9.2.000" expanded="true" height="68" name="Retrieve start_time_hh_Bixi_dataset_2016_station_6184" width="90" x="45" y="34">
+        <parameter key="repository_entry" value="start_time_hh_Bixi_dataset_2016_station_6184"/>
+        <description align="center" color="transparent" colored="false" width="126">full dataset&lt;br&gt;station_code_ 6184&lt;br&gt;year_2016&lt;br/&gt;with date_time in hh format</description>
+      </operator>
+      <operator activated="true" class="filter_examples" compatibility="9.2.000" expanded="true" height="103" name="Filter start station(s_s)" width="90" x="179" y="34">
+        <parameter key="parameter_expression" value=""/>
+        <parameter key="condition_class" value="custom_filters"/>
+        <parameter key="invert_filter" value="false"/>
+        <list key="filters_list">
+          <parameter key="filters_entry_key" value="start_station_code.equals.6184"/>
+        </list>
+        <parameter key="filters_logic_and" value="true"/>
+        <parameter key="filters_check_metadata" value="true"/>
+        <description align="center" color="transparent" colored="false" width="126">Trips from station 6184</description>
+      </operator>
+      <operator activated="true" class="retrieve" compatibility="9.2.000" expanded="true" height="68" name="Retrieve HW2_kNN_TestSet" width="90" x="179" y="187">
+        <parameter key="repository_entry" value="HW2_kNN_TestSet"/>
+        <description align="center" color="transparent" colored="false" width="126">HW2 kNN TestSet</description>
+      </operator>
+      <operator activated="true" class="union" compatibility="9.2.000" expanded="true" height="82" name="Union" width="90" x="313" y="34">
+        <description align="center" color="transparent" colored="false" width="126">To merge 2 &lt;br/&gt;datasets</description>
+      </operator>
+      <operator activated="true" class="select_attributes" compatibility="9.2.000" expanded="true" height="82" name="Select kNN Attributes" width="90" x="447" y="34">
+        <parameter key="attribute_filter_type" value="subset"/>
+        <parameter key="attribute" value=""/>
+        <parameter key="attributes" value="day|duration_sec|is_member|start_humidity|start_temperature|start_time|start_weather_type|start_wind_speed|end_station_code"/>
+        <parameter key="use_except_expression" value="false"/>
+        <parameter key="value_type" value="attribute_value"/>
+        <parameter key="use_value_type_exception" value="false"/>
+        <parameter key="except_value_type" value="time"/>
+        <parameter key="block_type" value="attribute_block"/>
+        <parameter key="use_block_type_exception" value="false"/>
+        <parameter key="except_block_type" value="value_matrix_row_start"/>
+        <parameter key="invert_selection" value="false"/>
+        <parameter key="include_special_attributes" value="false"/>
+        <description align="center" color="transparent" colored="false" width="126">Attributes required for &lt;br/&gt;kNN analysis</description>
+      </operator>
+      <operator activated="true" class="filter_examples" compatibility="9.2.000" expanded="true" height="103" name="Filter Inconsistencies" width="90" x="581" y="34">
+        <parameter key="parameter_expression" value=""/>
+        <parameter key="condition_class" value="custom_filters"/>
+        <parameter key="invert_filter" value="true"/>
+        <list key="filters_list">
+          <parameter key="filters_entry_key" value="start_weather_type.equals.very heavy rain"/>
+          <parameter key="filters_entry_key" value="start_wind_speed.gt.11\.2"/>
+        </list>
+        <parameter key="filters_logic_and" value="false"/>
+        <parameter key="filters_check_metadata" value="true"/>
+        <description align="center" color="transparent" colored="false" width="126">To Remove inconsistencies</description>
+      </operator>
+      <operator activated="true" class="set_role" compatibility="9.2.000" expanded="true" height="82" name="Set Target" width="90" x="715" y="34">
+        <parameter key="attribute_name" value="end_station_code"/>
+        <parameter key="target_role" value="label"/>
+        <list key="set_additional_roles"/>
+        <description align="center" color="transparent" colored="false" width="126">To label end_station_code</description>
+      </operator>
+      <operator activated="true" class="normalize" compatibility="9.2.000" expanded="true" height="103" name="Normalize" width="90" x="45" y="340">
+        <parameter key="return_preprocessing_model" value="false"/>
+        <parameter key="create_view" value="false"/>
+        <parameter key="attribute_filter_type" value="subset"/>
+        <parameter key="attribute" value=""/>
+        <parameter key="attributes" value="duration_sec|start_humidity|start_temperature|start_wind_speed"/>
+        <parameter key="use_except_expression" value="false"/>
+        <parameter key="value_type" value="numeric"/>
+        <parameter key="use_value_type_exception" value="false"/>
+        <parameter key="except_value_type" value="real"/>
+        <parameter key="block_type" value="value_series"/>
+        <parameter key="use_block_type_exception" value="false"/>
+        <parameter key="except_block_type" value="value_series_end"/>
+        <parameter key="invert_selection" value="false"/>
+        <parameter key="include_special_attributes" value="false"/>
+        <parameter key="method" value="Z-transformation"/>
+        <parameter key="min" value="0.0"/>
+        <parameter key="max" value="1.0"/>
+        <parameter key="allow_negative_values" value="false"/>
+        <description align="center" color="transparent" colored="false" width="126">Normalization</description>
+      </operator>
+      <operator activated="true" class="nominal_to_binominal" compatibility="9.2.000" expanded="true" height="103" name="Nominal to Binominal" width="90" x="179" y="340">
+        <parameter key="return_preprocessing_model" value="false"/>
+        <parameter key="create_view" value="false"/>
+        <parameter key="attribute_filter_type" value="single"/>
+        <parameter key="attribute" value="start_weather_type"/>
+        <parameter key="attributes" value=""/>
+        <parameter key="use_except_expression" value="false"/>
+        <parameter key="value_type" value="nominal"/>
+        <parameter key="use_value_type_exception" value="false"/>
+        <parameter key="except_value_type" value="file_path"/>
+        <parameter key="block_type" value="single_value"/>
+        <parameter key="use_block_type_exception" value="false"/>
+        <parameter key="except_block_type" value="single_value"/>
+        <parameter key="invert_selection" value="false"/>
+        <parameter key="include_special_attributes" value="false"/>
+        <parameter key="transform_binominal" value="false"/>
+        <parameter key="use_underscore_in_name" value="false"/>
+        <description align="center" color="transparent" colored="false" width="126">For dummy coding</description>
+      </operator>
+      <operator activated="true" class="nominal_to_numerical" compatibility="9.2.000" expanded="true" height="103" name="Nominal to Numerical" width="90" x="313" y="340">
+        <parameter key="return_preprocessing_model" value="false"/>
+        <parameter key="create_view" value="false"/>
+        <parameter key="attribute_filter_type" value="subset"/>
+        <parameter key="attribute" value=""/>
+        <parameter key="attributes" value="day|start_time"/>
+        <parameter key="use_except_expression" value="false"/>
+        <parameter key="value_type" value="nominal"/>
+        <parameter key="use_value_type_exception" value="false"/>
+        <parameter key="except_value_type" value="file_path"/>
+        <parameter key="block_type" value="single_value"/>
+        <parameter key="use_block_type_exception" value="false"/>
+        <parameter key="except_block_type" value="single_value"/>
+        <parameter key="invert_selection" value="false"/>
+        <parameter key="include_special_attributes" value="false"/>
+        <parameter key="coding_type" value="unique integers"/>
+        <parameter key="use_comparison_groups" value="false"/>
+        <list key="comparison_groups"/>
+        <parameter key="unexpected_value_handling" value="all 0 and warning"/>
+        <parameter key="use_underscore_in_name" value="false"/>
+        <description align="center" color="transparent" colored="false" width="126">For ordinal attributes</description>
+      </operator>
+      <operator activated="true" class="filter_examples" compatibility="9.2.000" expanded="true" height="103" name="Split Training &amp; Test Set" width="90" x="447" y="340">
+        <parameter key="parameter_expression" value=""/>
+        <parameter key="condition_class" value="custom_filters"/>
+        <parameter key="invert_filter" value="false"/>
+        <list key="filters_list">
+          <parameter key="filters_entry_key" value="end_station_code.is_missing."/>
+        </list>
+        <parameter key="filters_logic_and" value="true"/>
+        <parameter key="filters_check_metadata" value="true"/>
+        <description align="center" color="transparent" colored="false" width="126">To seperate training and test data</description>
+      </operator>
+      <operator activated="true" class="k_nn" compatibility="9.2.000" expanded="true" height="82" name="k-NN" width="90" x="581" y="442">
+        <parameter key="k" value="1"/>
+        <parameter key="weighted_vote" value="true"/>
+        <parameter key="measure_types" value="MixedMeasures"/>
+        <parameter key="mixed_measure" value="MixedEuclideanDistance"/>
+        <parameter key="nominal_measure" value="NominalDistance"/>
+        <parameter key="numerical_measure" value="EuclideanDistance"/>
+        <parameter key="divergence" value="GeneralizedIDivergence"/>
+        <parameter key="kernel_type" value="radial"/>
+        <parameter key="kernel_gamma" value="1.0"/>
+        <parameter key="kernel_sigma1" value="1.0"/>
+        <parameter key="kernel_sigma2" value="0.0"/>
+        <parameter key="kernel_sigma3" value="2.0"/>
+        <parameter key="kernel_degree" value="3.0"/>
+        <parameter key="kernel_shift" value="1.0"/>
+        <parameter key="kernel_a" value="1.0"/>
+        <parameter key="kernel_b" value="0.0"/>
+        <description align="center" color="transparent" colored="false" width="126">To generate kNN model</description>
+      </operator>
+      <operator activated="true" class="replace_missing_values" compatibility="9.2.000" expanded="true" height="103" name="Replace Missing Values" width="90" x="581" y="238">
+        <parameter key="return_preprocessing_model" value="false"/>
+        <parameter key="create_view" value="false"/>
+        <parameter key="attribute_filter_type" value="single"/>
+        <parameter key="attribute" value="start_humidity"/>
+        <parameter key="attributes" value=""/>
+        <parameter key="use_except_expression" value="false"/>
+        <parameter key="value_type" value="attribute_value"/>
+        <parameter key="use_value_type_exception" value="false"/>
+        <parameter key="except_value_type" value="time"/>
+        <parameter key="block_type" value="attribute_block"/>
+        <parameter key="use_block_type_exception" value="false"/>
+        <parameter key="except_block_type" value="value_matrix_row_start"/>
+        <parameter key="invert_selection" value="false"/>
+        <parameter key="include_special_attributes" value="false"/>
+        <parameter key="default" value="average"/>
+        <list key="columns"/>
+        <description align="center" color="transparent" colored="false" width="126">To replace start_humidity values</description>
+      </operator>
+      <operator activated="true" class="apply_model" compatibility="9.2.000" expanded="true" height="82" name="Apply Model" width="90" x="715" y="340">
+        <list key="application_parameters"/>
+        <parameter key="create_view" value="false"/>
+        <description align="center" color="transparent" colored="false" width="126">To apply kNN model on test set</description>
+      </operator>
+      <connect from_op="Retrieve start_time_hh_Bixi_dataset_2016_station_6184" from_port="output" to_op="Filter start station(s_s)" to_port="example set input"/>
+      <connect from_op="Filter start station(s_s)" from_port="example set output" to_op="Union" to_port="example set 1"/>
+      <connect from_op="Retrieve HW2_kNN_TestSet" from_port="output" to_op="Union" to_port="example set 2"/>
+      <connect from_op="Union" from_port="union" to_op="Select kNN Attributes" to_port="example set input"/>
+      <connect from_op="Select kNN Attributes" from_port="example set output" to_op="Filter Inconsistencies" to_port="example set input"/>
+      <connect from_op="Filter Inconsistencies" from_port="example set output" to_op="Set Target" to_port="example set input"/>
+      <connect from_op="Set Target" from_port="example set output" to_op="Normalize" to_port="example set input"/>
+      <connect from_op="Normalize" from_port="example set output" to_op="Nominal to Binominal" to_port="example set input"/>
+      <connect from_op="Nominal to Binominal" from_port="example set output" to_op="Nominal to Numerical" to_port="example set input"/>
+      <connect from_op="Nominal to Numerical" from_port="example set output" to_op="Split Training &amp; Test Set" to_port="example set input"/>
+      <connect from_op="Split Training &amp; Test Set" from_port="example set output" to_op="Replace Missing Values" to_port="example set input"/>
+      <connect from_op="Split Training &amp; Test Set" from_port="unmatched example set" to_op="k-NN" to_port="training set"/>
+      <connect from_op="k-NN" from_port="model" to_op="Apply Model" to_port="model"/>
+      <connect from_op="Replace Missing Values" from_port="example set output" to_op="Apply Model" to_port="unlabelled data"/>
+      <connect from_op="Apply Model" from_port="labelled data" to_port="result 1"/>
+      <connect from_op="Apply Model" from_port="model" to_port="result 2"/>
+      <portSpacing port="source_input 1" spacing="0"/>
+      <portSpacing port="sink_result 1" spacing="0"/>
+      <portSpacing port="sink_result 2" spacing="0"/>
+      <portSpacing port="sink_result 3" spacing="0"/>
+    </process>
+  </operator>
+</process>

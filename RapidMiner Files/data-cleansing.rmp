@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?><process version="9.2.001">
+  <context>
+    <input/>
+    <output/>
+    <macros/>
+  </context>
+  <operator activated="true" class="process" compatibility="9.2.001" expanded="true" name="Process">
+    <parameter key="logverbosity" value="init"/>
+    <parameter key="random_seed" value="2001"/>
+    <parameter key="send_mail" value="never"/>
+    <parameter key="notification_email" value=""/>
+    <parameter key="process_duration_for_mail" value="30"/>
+    <parameter key="encoding" value="SYSTEM"/>
+    <process expanded="true">
+      <operator activated="true" class="retrieve" compatibility="9.2.001" expanded="true" height="68" name="Retrieve updated all collisons dataset 2013-17" width="90" x="45" y="34">
+        <parameter key="repository_entry" value="//Term Project/Unmerged/updated all collisons dataset 2013-17"/>
+      </operator>
+      <operator activated="true" class="select_attributes" compatibility="9.2.001" expanded="true" height="82" name="Remove Attributes" width="90" x="179" y="34">
+        <parameter key="attribute_filter_type" value="subset"/>
+        <parameter key="attribute" value=""/>
+        <parameter key="attributes" value="TRAFFIC_CONTROL_CONDITION|X|Y"/>
+        <parameter key="use_except_expression" value="false"/>
+        <parameter key="value_type" value="attribute_value"/>
+        <parameter key="use_value_type_exception" value="false"/>
+        <parameter key="except_value_type" value="time"/>
+        <parameter key="block_type" value="attribute_block"/>
+        <parameter key="use_block_type_exception" value="false"/>
+        <parameter key="except_block_type" value="value_matrix_row_start"/>
+        <parameter key="invert_selection" value="true"/>
+        <parameter key="include_special_attributes" value="false"/>
+      </operator>
+      <operator activated="true" class="replace_missing_values" compatibility="9.2.001" expanded="true" height="103" name="Add Red light Camera" width="90" x="313" y="34">
+        <parameter key="return_preprocessing_model" value="false"/>
+        <parameter key="create_view" value="false"/>
+        <parameter key="attribute_filter_type" value="single"/>
+        <parameter key="attribute" value="RED_LIGHT_CAMERA"/>
+        <parameter key="attributes" value=""/>
+        <parameter key="use_except_expression" value="false"/>
+        <parameter key="value_type" value="attribute_value"/>
+        <parameter key="use_value_type_exception" value="false"/>
+        <parameter key="except_value_type" value="time"/>
+        <parameter key="block_type" value="attribute_block"/>
+        <parameter key="use_block_type_exception" value="false"/>
+        <parameter key="except_block_type" value="value_matrix_row_start"/>
+        <parameter key="invert_selection" value="false"/>
+        <parameter key="include_special_attributes" value="false"/>
+        <parameter key="default" value="value"/>
+        <list key="columns"/>
+        <parameter key="replenishment_value" value="0"/>
+        <description align="center" color="transparent" colored="false" width="126"/>
+      </operator>
+      <operator activated="true" class="map" compatibility="9.2.001" expanded="true" height="82" name="Map Day" width="90" x="447" y="34">
+        <parameter key="attribute_filter_type" value="single"/>
+        <parameter key="attribute" value="DAY"/>
+        <parameter key="attributes" value="DAY|TIME(HH)"/>
+        <parameter key="use_except_expression" value="false"/>
+        <parameter key="value_type" value="attribute_value"/>
+        <parameter key="use_value_type_exception" value="false"/>
+        <parameter key="except_value_type" value="time"/>
+        <parameter key="block_type" value="attribute_block"/>
+        <parameter key="use_block_type_exception" value="false"/>
+        <parameter key="except_block_type" value="value_matrix_row_start"/>
+        <parameter key="invert_selection" value="false"/>
+        <parameter key="include_special_attributes" value="false"/>
+        <list key="value_mappings">
+          <parameter key="Mon" value="0"/>
+          <parameter key="Tue" value="0"/>
+          <parameter key="Wed" value="0"/>
+          <parameter key="Thu" value="0"/>
+          <parameter key="Fri" value="0"/>
+          <parameter key="Sat" value="1"/>
+          <parameter key="Sun" value="1"/>
+        </list>
+        <parameter key="consider_regular_expressions" value="false"/>
+        <parameter key="add_default_mapping" value="false"/>
+      </operator>
+      <operator activated="true" class="map" compatibility="9.2.001" expanded="true" height="82" name="Map Time" width="90" x="581" y="34">
+        <parameter key="attribute_filter_type" value="single"/>
+        <parameter key="attribute" value="TIME (hh)"/>
+        <parameter key="attributes" value="DAY|TIME(HH)"/>
+        <parameter key="use_except_expression" value="false"/>
+        <parameter key="value_type" value="attribute_value"/>
+        <parameter key="use_value_type_exception" value="false"/>
+        <parameter key="except_value_type" value="time"/>
+        <parameter key="block_type" value="attribute_block"/>
+        <parameter key="use_block_type_exception" value="false"/>
+        <parameter key="except_block_type" value="value_matrix_row_start"/>
+        <parameter key="invert_selection" value="false"/>
+        <parameter key="include_special_attributes" value="false"/>
+        <list key="value_mappings">
+          <parameter key="22" value="Night"/>
+          <parameter key="23" value="Night"/>
+          <parameter key="24" value="Night"/>
+          <parameter key="1" value="Night"/>
+          <parameter key="2" value="Night"/>
+          <parameter key="3" value="Night"/>
+          <parameter key="4" value="Night"/>
+          <parameter key="5" value="Night"/>
+          <parameter key="6" value="Morning"/>
+          <parameter key="7" value="Morning"/>
+          <parameter key="8" value="Morning"/>
+          <parameter key="9" value="Morning"/>
+          <parameter key="10" value="Morning"/>
+          <parameter key="11" value="Morning"/>
+          <parameter key="12" value="Morning"/>
+          <parameter key="13" value="Afternoon"/>
+          <parameter key="14" value="Afternoon"/>
+          <parameter key="15" value="Afternoon"/>
+          <parameter key="16" value="Afternoon"/>
+          <parameter key="17" value="Evening"/>
+          <parameter key="18" value="Evening"/>
+          <parameter key="19" value="Evening"/>
+          <parameter key="20" value="Evening"/>
+          <parameter key="21" value="Evening"/>
+          <parameter key="0" value="Night"/>
+        </list>
+        <parameter key="consider_regular_expressions" value="false"/>
+        <parameter key="add_default_mapping" value="false"/>
+      </operator>
+      <operator activated="true" class="filter_examples" compatibility="9.2.001" expanded="true" height="103" name="Remove missing values" width="90" x="715" y="34">
+        <parameter key="parameter_expression" value=""/>
+        <parameter key="condition_class" value="custom_filters"/>
+        <parameter key="invert_filter" value="true"/>
+        <list key="filters_list">
+          <parameter key="filters_entry_key" value="ENVIRONMENT.is_missing."/>
+          <parameter key="filters_entry_key" value="TRAFFIC_CONTROL.is_missing."/>
+        </list>
+        <parameter key="filters_logic_and" value="false"/>
+        <parameter key="filters_check_metadata" value="true"/>
+      </operator>
+      <operator activated="true" class="filter_examples" compatibility="9.2.001" expanded="true" height="103" name="Remove Unknown values" width="90" x="849" y="34">
+        <parameter key="parameter_expression" value=""/>
+        <parameter key="condition_class" value="custom_filters"/>
+        <parameter key="invert_filter" value="true"/>
+        <list key="filters_list">
+          <parameter key="filters_entry_key" value="ENVIRONMENT.equals.00 - Unknown"/>
+          <parameter key="filters_entry_key" value="ENVIRONMENT.equals.99 - Other"/>
+          <parameter key="filters_entry_key" value="SURFACE_CONDITION.equals.99 - Other"/>
+          <parameter key="filters_entry_key" value="SURFACE_CONDITION.equals.00 - Unknown"/>
+          <parameter key="filters_entry_key" value="IMPACT_TYPE.equals.99 - Other"/>
+          <parameter key="filters_entry_key" value="LIGHT.equals.99 - Other"/>
+          <parameter key="filters_entry_key" value="TRAFFIC_CONTROL.equals.99 - Other"/>
+        </list>
+        <parameter key="filters_logic_and" value="false"/>
+        <parameter key="filters_check_metadata" value="true"/>
+        <description align="center" color="transparent" colored="false" width="126">To remove Examples with unknown or other values</description>
+      </operator>
+      <operator activated="true" class="write_csv" compatibility="9.2.001" expanded="true" height="82" name="Write CSV" width="90" x="983" y="34">
+        <parameter key="csv_file" value="D:\Vivek_important_documetns_DO_NOT_DELETE\Vivek_Big_data_do_not_delete\Project\Submission\Cleaned dataset final.csv"/>
+        <parameter key="column_separator" value=","/>
+        <parameter key="write_attribute_names" value="true"/>
+        <parameter key="quote_nominal_values" value="true"/>
+        <parameter key="format_date_attributes" value="true"/>
+        <parameter key="append_to_file" value="false"/>
+        <parameter key="encoding" value="SYSTEM"/>
+      </operator>
+      <connect from_op="Retrieve updated all collisons dataset 2013-17" from_port="output" to_op="Remove Attributes" to_port="example set input"/>
+      <connect from_op="Remove Attributes" from_port="example set output" to_op="Add Red light Camera" to_port="example set input"/>
+      <connect from_op="Add Red light Camera" from_port="example set output" to_op="Map Day" to_port="example set input"/>
+      <connect from_op="Map Day" from_port="example set output" to_op="Map Time" to_port="example set input"/>
+      <connect from_op="Map Time" from_port="example set output" to_op="Remove missing values" to_port="example set input"/>
+      <connect from_op="Remove missing values" from_port="example set output" to_op="Remove Unknown values" to_port="example set input"/>
+      <connect from_op="Remove Unknown values" from_port="example set output" to_op="Write CSV" to_port="input"/>
+      <connect from_op="Write CSV" from_port="through" to_port="result 1"/>
+      <portSpacing port="source_input 1" spacing="0"/>
+      <portSpacing port="sink_result 1" spacing="0"/>
+      <portSpacing port="sink_result 2" spacing="0"/>
+    </process>
+  </operator>
+</process>

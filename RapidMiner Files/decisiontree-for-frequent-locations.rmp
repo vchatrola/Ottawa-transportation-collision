@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?><process version="9.2.001">
+  <context>
+    <input/>
+    <output/>
+    <macros/>
+  </context>
+  <operator activated="true" class="process" compatibility="9.2.001" expanded="true" name="Process">
+    <parameter key="logverbosity" value="init"/>
+    <parameter key="random_seed" value="2001"/>
+    <parameter key="send_mail" value="never"/>
+    <parameter key="notification_email" value=""/>
+    <parameter key="process_duration_for_mail" value="30"/>
+    <parameter key="encoding" value="SYSTEM"/>
+    <process expanded="true">
+      <operator activated="true" class="retrieve" compatibility="9.2.001" expanded="true" height="68" name="Retrieve 2. Most dangereous locations" width="90" x="45" y="34">
+        <parameter key="repository_entry" value="../Merged/2. Most dangereous locations"/>
+      </operator>
+      <operator activated="true" class="shuffle" compatibility="9.2.001" expanded="true" height="82" name="Shuffle" width="90" x="179" y="34">
+        <parameter key="use_local_random_seed" value="false"/>
+        <parameter key="local_random_seed" value="1992"/>
+      </operator>
+      <operator activated="true" class="select_attributes" compatibility="9.2.001" expanded="true" height="82" name="Select DT Attributes" width="90" x="313" y="34">
+        <parameter key="attribute_filter_type" value="subset"/>
+        <parameter key="attribute" value=""/>
+        <parameter key="attributes" value="COLLISION_CLASSIFICATION|COLLISION_ID|ENVIRONMENT|IMPACT_TYPE|LIGHT|RED_LIGHT_CAMERA|SURFACE_CONDITION|TRAFFIC_CONTROL"/>
+        <parameter key="use_except_expression" value="false"/>
+        <parameter key="value_type" value="attribute_value"/>
+        <parameter key="use_value_type_exception" value="false"/>
+        <parameter key="except_value_type" value="time"/>
+        <parameter key="block_type" value="attribute_block"/>
+        <parameter key="use_block_type_exception" value="false"/>
+        <parameter key="except_block_type" value="value_matrix_row_start"/>
+        <parameter key="invert_selection" value="false"/>
+        <parameter key="include_special_attributes" value="false"/>
+        <description align="center" color="transparent" colored="false" width="126">Attributes&lt;br&gt;for&lt;br&gt;the DT</description>
+      </operator>
+      <operator activated="true" class="set_role" compatibility="9.2.001" expanded="true" height="82" name="Set ID &amp; Label" width="90" x="447" y="34">
+        <parameter key="attribute_name" value="COLLISION_ID"/>
+        <parameter key="target_role" value="id"/>
+        <list key="set_additional_roles">
+          <parameter key="COLLISION_CLASSIFICATION" value="label"/>
+        </list>
+        <description align="center" color="transparent" colored="false" width="126">to set&lt;br&gt;ID and target&lt;br&gt;attributes</description>
+      </operator>
+      <operator activated="true" class="concurrency:parallel_decision_tree" compatibility="9.2.001" expanded="true" height="103" name="Decision Tree" width="90" x="581" y="34">
+        <parameter key="criterion" value="information_gain"/>
+        <parameter key="maximal_depth" value="5"/>
+        <parameter key="apply_pruning" value="true"/>
+        <parameter key="confidence" value="0.1"/>
+        <parameter key="apply_prepruning" value="true"/>
+        <parameter key="minimal_gain" value="0.01"/>
+        <parameter key="minimal_leaf_size" value="2"/>
+        <parameter key="minimal_size_for_split" value="4"/>
+        <parameter key="number_of_prepruning_alternatives" value="3"/>
+        <description align="center" color="transparent" colored="false" width="126">To create&lt;br&gt;a DT model</description>
+      </operator>
+      <connect from_op="Retrieve 2. Most dangereous locations" from_port="output" to_op="Shuffle" to_port="example set input"/>
+      <connect from_op="Shuffle" from_port="example set output" to_op="Select DT Attributes" to_port="example set input"/>
+      <connect from_op="Select DT Attributes" from_port="example set output" to_op="Set ID &amp; Label" to_port="example set input"/>
+      <connect from_op="Set ID &amp; Label" from_port="example set output" to_op="Decision Tree" to_port="training set"/>
+      <connect from_op="Decision Tree" from_port="model" to_port="result 1"/>
+      <connect from_op="Decision Tree" from_port="weights" to_port="result 2"/>
+      <portSpacing port="source_input 1" spacing="0"/>
+      <portSpacing port="sink_result 1" spacing="0"/>
+      <portSpacing port="sink_result 2" spacing="0"/>
+      <portSpacing port="sink_result 3" spacing="0"/>
+    </process>
+  </operator>
+</process>
